@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shade Widget</string>
+    <string name="widget_name">Notification shade</string>
+    <string name="widget_description">Mirrors your notification shade, groups and all.</string>
+    <string name="no_notifications">No notifications</string>
+    <string name="setup_title">Notification access needed</string>
+    <string name="setup_body">Tap to finish setting up</string>
+    <string name="connecting">Connecting to notifications…</string>
+
+    <dimen name="card_radius_large">20dp</dimen>
+    <dimen name="card_radius_small">6dp</dimen>
+
+
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
+
+    <style name="TrampolineTheme" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>

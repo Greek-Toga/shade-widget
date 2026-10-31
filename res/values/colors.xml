@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material You (dynamic) colors, light theme. Resolved by the launcher, so they follow the wallpaper. -->
+<resources>
+    <color name="text_primary">@android:color/system_on_surface_light</color>
+    <color name="text_secondary">@android:color/system_on_surface_variant_light</color>
+    <color name="icon_circle">@android:color/system_primary_light</color>
+    <color name="on_icon_circle">@android:color/system_on_primary_light</color>
+    <color name="pill_bg">@android:color/system_secondary_container_light</color>
+    <color name="on_pill">@android:color/system_on_secondary_container_light</color>
+    <color name="accent">@android:color/system_primary_light</color>
+</resources>

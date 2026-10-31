@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material You (dynamic) colors, dark theme. -->
+<resources>
+    <color name="text_primary">@android:color/system_on_surface_dark</color>
+    <color name="text_secondary">@android:color/system_on_surface_variant_dark</color>
+    <color name="icon_circle">@android:color/system_primary_dark</color>
+    <color name="on_icon_circle">@android:color/system_on_primary_dark</color>
+    <color name="pill_bg">@android:color/system_secondary_container_dark</color>
+    <color name="on_pill">@android:color/system_on_secondary_container_dark</color>
+    <color name="accent">@android:color/system_primary_dark</color>
+</resources>
