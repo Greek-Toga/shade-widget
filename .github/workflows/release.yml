@@ -1,8 +1,13 @@
-# Creates a GitHub release with the APK attached whenever a version tag (v1.2, v1.3, ...) is pushed.
+# Publishes a GitHub release with the APK attached whenever dist/ShadeWidget.apk changes on main.
+# The version number comes from versionName in AndroidManifest.xml.
 name: Release
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+    paths:
+      - dist/ShadeWidget.apk
+      - .github/workflows/release.yml
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
@@ -14,6 +19,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/ShadeWidget.apk \
-            --title "Shade Widget ${GITHUB_REF_NAME#v}" \
-            --notes-file .github/release-notes.md --latest
+          VERSION=$(grep -oP 'android:versionName="\K[^"]+' AndroidManifest.xml)
+          TAG="v$VERSION"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/ShadeWidget.apk --clobber
+          else
+            gh release create "$TAG" dist/ShadeWidget.apk \
+              --target "$GITHUB_SHA" \
+              --title "Shade Widget $VERSION" \
+              --notes-file .github/release-notes.md --latest
+          fi
