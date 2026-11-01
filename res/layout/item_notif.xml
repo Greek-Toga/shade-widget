@@ -39,6 +39,13 @@
                 android:tint="@color/on_icon_circle" />
 
             <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
+
+            <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

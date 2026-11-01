@@ -10,6 +10,7 @@ A home screen widget that mirrors your Android notification shade.
 
 ## In this version
 
+- Full-color app icons, matching the shade
 - Priority conversations now appear on their own at the top, outside their app's group, like the shade
 
 - Notifications in the shade's order and sections

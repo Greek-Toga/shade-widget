@@ -189,6 +189,11 @@ final class WidgetRenderer {
 
     private static RemoteViews buildList(Context context, List<ShadeModel.TopItem> items,
                                          Set<String> expanded, boolean bitmaps, int maxRows) {
+        // Re-read icons each redraw so an app update that changes its icon shows up.
+        synchronized (sIconCache) {
+            sIconCache.clear();
+            sNoIcon.clear();
+        }
         Ctx x = new Ctx();
         x.c = context;
         x.bitmaps = bitmaps;
@@ -282,8 +287,7 @@ final class WidgetRenderer {
             h.setOnClickFillInIntent(R.id.card, toggleIntent(t.groupKey));
         } else {
             h.setTextViewText(R.id.title, appName(x.c, rep.sbn));
-            h.setImageViewIcon(R.id.small_icon, repN.getSmallIcon());
-            applyIconColor(h, repN.color);
+            setAppIcon(x, h, rep.sbn);
             CharSequence sub = repN.extras != null
                     ? repN.extras.getCharSequence(Notification.EXTRA_SUB_TEXT) : null;
             CharSequence line = join(sub, time);
@@ -349,8 +353,7 @@ final class WidgetRenderer {
             rv.setViewVisibility(R.id.icon_frame, View.GONE);
             rv.setViewPadding(R.id.card, x.dp(60), x.dp(8), x.dp(14), x.dp(8));
         } else if (!showedAvatar) {
-            rv.setImageViewIcon(R.id.small_icon, n.getSmallIcon());
-            applyIconColor(rv, n.color);
+            setAppIcon(x, rv, sbn);
         }
 
         // Header line: "App • subtext • 5m" (children skip the app name, as in the shade).
@@ -399,6 +402,55 @@ final class WidgetRenderer {
                 }
             }
         }
+    }
+
+    /**
+     * Show the app's own full-color launcher icon, as the shade does. Apps with no launcher icon
+     * (Android System, System UI and similar) keep the notification's small icon in a circle.
+     */
+    private static void setAppIcon(Ctx x, RemoteViews rv, StatusBarNotification sbn) {
+        Icon app = launcherIcon(x.c, sbn.getPackageName());
+        if (app != null) {
+            rv.setImageViewIcon(R.id.app_icon, app);
+            rv.setViewVisibility(R.id.app_icon, View.VISIBLE);
+            rv.setViewVisibility(R.id.icon_bg, View.GONE);
+            rv.setViewVisibility(R.id.small_icon, View.GONE);
+        } else {
+            Notification n = sbn.getNotification();
+            rv.setImageViewIcon(R.id.small_icon, n.getSmallIcon());
+            applyIconColor(rv, n.color);
+        }
+    }
+
+    private static final Map<String, Icon> sIconCache = new HashMap<>();
+    private static final Set<String> sNoIcon = new HashSet<>();
+
+    /**
+     * The icon of the app's launcher entry, passed as a resource reference so the launcher draws
+     * it itself (in its own shape) and no bitmap has to be copied into the widget.
+     */
+    static Icon launcherIcon(Context ctx, String pkg) {
+        synchronized (sIconCache) {
+            if (sNoIcon.contains(pkg)) return null;
+            Icon cached = sIconCache.get(pkg);
+            if (cached != null) return cached;
+        }
+        Icon icon = null;
+        try {
+            PackageManager pm = ctx.getPackageManager();
+            Intent launch = pm.getLaunchIntentForPackage(pkg);
+            if (launch != null) {
+                android.content.pm.ResolveInfo ri = pm.resolveActivity(launch, 0);
+                int res = ri != null && ri.activityInfo != null ? ri.activityInfo.getIconResource() : 0;
+                if (res == 0) res = pm.getApplicationInfo(pkg, 0).icon;
+                if (res != 0) icon = Icon.createWithResource(pkg, res);
+            }
+        } catch (PackageManager.NameNotFoundException | RuntimeException ignored) {
+        }
+        synchronized (sIconCache) {
+            if (icon != null) sIconCache.put(pkg, icon); else sNoIcon.add(pkg);
+        }
+        return icon;
     }
 
     private static void applyIconColor(RemoteViews rv, int color) {
