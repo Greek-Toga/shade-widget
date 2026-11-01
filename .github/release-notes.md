@@ -10,6 +10,8 @@ A home screen widget that mirrors your Android notification shade.
 
 ## In this version
 
+- Priority conversations now appear on their own at the top, outside their app's group, like the shade
+
 - Notifications in the shade's order and sections
 - Expandable groups and Pixel notification bundles
 - Tap to open, clearing it like the shade does

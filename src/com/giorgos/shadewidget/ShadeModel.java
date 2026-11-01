@@ -109,6 +109,15 @@ final class ShadeModel {
                 }
                 continue;
             }
+            // Priority conversations are lifted out of their app's group and shown on their own
+            // in the priority conversations section, exactly as the shade does.
+            if (!isSummary && e.sbn.isGroup() && e.section == SECTION_PRIORITY_PEOPLE) {
+                singles.add(e);
+                String gk = e.sbn.getGroupKey();
+                Integer c = bundledFromGroup.get(gk);
+                bundledFromGroup.put(gk, c == null ? 1 : c + 1);
+                continue;
+            }
             if (e.sbn.isGroup()) {
                 String gk = e.sbn.getGroupKey();
                 if (isSummary) {
