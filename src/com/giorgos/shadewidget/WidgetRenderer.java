@@ -272,11 +272,11 @@ final class WidgetRenderer {
 
         // Header
         RemoteViews h = piece(x, R.layout.item_group_header, gap, top, FLAT);
+        // The shade's group header shows the time of the newest notification in the group.
+        // (Not the summary's time: many apps, e.g. Reddit and X, never update their summary.)
         long newest = 0;
-        for (ShadeModel.Entry k : kids) newest = Math.max(newest, k.sbn.getNotification().when);
-        // App groups show the summary's own timestamp (if it has one), like the shade's group header.
-        String time = t.summary == null ? relTime(newest, x.now)
-                : (showsTime(repN) ? relTime(repN.when, x.now) : "");
+        for (ShadeModel.Entry k : kids) newest = Math.max(newest, k.recency);
+        String time = relTime(newest, x.now);
 
         if (t.bundleChannel != null) {
             h.setTextViewText(R.id.title, bundleLabel(t.bundleChannel));
