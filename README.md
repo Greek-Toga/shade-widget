@@ -6,7 +6,7 @@ Requires Android 14 or newer. Built and tested on a Pixel 10 Pro.
 
 ## Install
 
-1. Download `ShadeWidget.apk` from the latest release on the Releases page (right-hand side of this page).
+1. Download the app: [ShadeWidget.apk](https://github.com/Greek-Toga/shade-widget/releases/latest/download/ShadeWidget.apk). (Backup link: [dist/ShadeWidget.apk](https://github.com/Greek-Toga/shade-widget/raw/main/dist/ShadeWidget.apk).)
 2. Open the downloaded file on your phone. If asked, allow installs from your browser or Files app, then tap Install. If Play Protect warns about an unknown app, choose to install anyway.
 3. Open Shade Widget and tap "Open notification access", then turn it on.
 4. If that switch is greyed out: go back, tap "Open App info", tap the ⋮ menu in the top right, choose "Allow restricted settings", confirm, then repeat step 3.
