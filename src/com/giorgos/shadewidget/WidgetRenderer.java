@@ -244,8 +244,46 @@ final class WidgetRenderer {
         RemoteViews rv = new RemoteViews(x.c.getPackageName(), layout);
         rv.setViewPadding(R.id.item_root, 0, gap, 0, 0);
         rv.setInt(R.id.card, "setBackgroundResource", CARD_BG[top][bottom]);
+        resetRow(x, rv, layout);
         x.firstPiece = false;
         return rv;
+    }
+
+    /**
+     * The launcher reuses row views while scrolling and after groups expand or collapse. Anything
+     * a row doesn't set explicitly keeps whatever the previous occupant left behind (a profile
+     * photo, a hidden icon...). So every row starts by putting every view back to its default.
+     */
+    private static void resetRow(Ctx x, RemoteViews rv, int layout) {
+        if (layout == R.layout.item_notif) {
+            rv.setViewVisibility(R.id.icon_frame, View.VISIBLE);
+            rv.setViewVisibility(R.id.icon_bg, View.VISIBLE);
+            rv.setViewVisibility(R.id.small_icon, View.VISIBLE);
+            rv.setViewVisibility(R.id.app_icon, View.GONE);
+            rv.setViewVisibility(R.id.avatar, View.GONE);
+            rv.setViewVisibility(R.id.large_icon, View.GONE);
+            rv.setViewVisibility(R.id.progress, View.GONE);
+            rv.setViewVisibility(R.id.chrono, View.GONE);
+            rv.setChronometer(R.id.chrono, 0, null, false);
+            rv.setViewVisibility(R.id.header_text, View.VISIBLE);
+            rv.setViewVisibility(R.id.title, View.VISIBLE);
+            rv.setViewVisibility(R.id.text, View.VISIBLE);
+            // Colors resolved by the launcher at draw time, so they still follow light/dark mode.
+            rv.setColor(R.id.icon_bg, "setColorFilter", R.color.icon_circle);
+            rv.setColor(R.id.small_icon, "setColorFilter", R.color.on_icon_circle);
+            rv.setViewPadding(R.id.card, x.dp(12), x.dp(12), x.dp(14), x.dp(12));
+        } else if (layout == R.layout.item_group_header) {
+            rv.setViewVisibility(R.id.icon_bg, View.VISIBLE);
+            rv.setViewVisibility(R.id.small_icon, View.VISIBLE);
+            rv.setViewVisibility(R.id.app_icon, View.GONE);
+            rv.setViewVisibility(R.id.header_text, View.VISIBLE);
+            // Colors resolved by the launcher at draw time, so they still follow light/dark mode.
+            rv.setColor(R.id.icon_bg, "setColorFilter", R.color.icon_circle);
+            rv.setColor(R.id.small_icon, "setColorFilter", R.color.on_icon_circle);
+            rv.setViewPadding(R.id.card, x.dp(12), x.dp(12), x.dp(10), x.dp(6));
+        } else if (layout == R.layout.item_child_line) {
+            rv.setViewPadding(R.id.card, x.dp(60), x.dp(3), x.dp(14), x.dp(3));
+        }
     }
 
     private static void add(Ctx x, String idKey, RemoteViews rv) {

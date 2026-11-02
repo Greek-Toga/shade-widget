@@ -10,6 +10,7 @@ A home screen widget that mirrors your Android notification shade.
 
 ## In this version
 
+- Fixed leftover pictures and missing icons after expanding or collapsing a group
 - Group times now show the newest notification, like the shade
 - Full-color app icons, matching the shade
 - Priority conversations now appear on their own at the top, outside their app's group, like the shade
