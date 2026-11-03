@@ -231,7 +231,7 @@ final class WidgetRenderer {
                 if (t.isGroup()) {
                     addGroup(x, t, expanded.contains(t.groupKey), gap, top, bottom);
                 } else {
-                    addSingle(x, t.single, gap, top, bottom);
+                    addSingle(x, t.single, gap, top, bottom, t.loneChild);
                 }
             } catch (RuntimeException ex) {
                 // One app's malformed notification must not take the whole widget down.
@@ -307,10 +307,13 @@ final class WidgetRenderer {
 
     // ---------------------------------------------------------------- standalone notification
 
-    private static void addSingle(Ctx x, ShadeModel.Entry e, int gap, int top, int bottom) {
+    private static void addSingle(Ctx x, ShadeModel.Entry e, int gap, int top, int bottom,
+                                  boolean loneChild) {
         RemoteViews rv = piece(x, R.layout.item_notif, gap, top, bottom);
         fillNotification(x, rv, e, false);
         rv.setOnClickFillInIntent(R.id.card, openIntent(e));
+        // A group with one notification shows no header or chevron, so it gets its X right away.
+        if (loneChild) showDismiss(x, rv, e);
         add(x, e.key, rv);
     }
 
@@ -362,12 +365,7 @@ final class WidgetRenderer {
                 rv.setOnClickFillInIntent(R.id.card, openIntent(k));
                 // X to delete: only here (expanded group), only when the setting is on, and only
                 // for notifications the shade itself lets you clear.
-                if (x.dismiss && k.sbn.isClearable()) {
-                    rv.setViewVisibility(R.id.dismiss, View.VISIBLE);
-                    rv.setOnClickFillInIntent(R.id.dismiss, new Intent()
-                            .putExtra(EXTRA_OP, OP_DISMISS)
-                            .putExtra(EXTRA_KEY, k.key));
-                }
+                showDismiss(x, rv, k);
                 add(x, k.key + "#c", rv);
             }
         } else {
@@ -385,6 +383,14 @@ final class WidgetRenderer {
                 add(x, k.key + "#l", rv);
             }
         }
+    }
+
+    private static void showDismiss(Ctx x, RemoteViews rv, ShadeModel.Entry e) {
+        if (!x.dismiss || !e.sbn.isClearable()) return;
+        rv.setViewVisibility(R.id.dismiss, View.VISIBLE);
+        rv.setOnClickFillInIntent(R.id.dismiss, new Intent()
+                .putExtra(EXTRA_OP, OP_DISMISS)
+                .putExtra(EXTRA_KEY, e.key));
     }
 
     // ---------------------------------------------------------------- one notification's content

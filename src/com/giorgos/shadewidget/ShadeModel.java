@@ -60,6 +60,7 @@ final class ShadeModel {
         int section;
         int rank;
         long recency;            // newest visible member's time
+        boolean loneChild;       // the only notification left in a group (shown without a header)
 
         boolean isGroup() { return single == null; }
     }
@@ -146,7 +147,9 @@ final class ShadeModel {
                 Collections.sort(kids, byRank);
                 out.add(group(gk, summary, kids, null));
             } else if (kidCount == 1) {
-                out.add(single(kids.get(0)));
+                TopItem lone = single(kids.get(0));
+                lone.loneChild = true;
+                out.add(lone);
             } else if (!bundledFromGroup.containsKey(gk)) {
                 // Summary with no children: the shade shows it as a normal notification.
                 out.add(single(summary));
@@ -163,7 +166,9 @@ final class ShadeModel {
             List<Entry> kids = b.getValue();
             Collections.sort(kids, byRank);
             if (kids.size() == 1) {
-                out.add(single(kids.get(0)));
+                TopItem lone = single(kids.get(0));
+                lone.loneChild = true;
+                out.add(lone);
             } else {
                 out.add(group("bundle:" + b.getKey(), null, kids, b.getKey()));
             }

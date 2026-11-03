@@ -161,7 +161,7 @@ public class DemoView extends View {
 
         // Expanded rows, each with an X (fade in while expanding)
         float rowA = expand * global;
-        float xCx = right - 12 * dp - 15 * dp;
+        float xCx = right - 12 * dp - 12 * dp;
         float tapX2 = xCx, tapY2 = 0;
         if (rowA > 0.01f) {
             float y = y0;
@@ -184,10 +184,10 @@ public class DemoView extends View {
                     bar(c, contentL, cy - 12 * dp, 110 * dp, 9 * dp, cPrimary, 0.7f * a);
                     bar(c, contentL, cy + 4 * dp, right - contentL - 70 * dp, 8 * dp, cSecondary, 0.4f * a);
                     fill.setColor(alpha(cPill, a));
-                    c.drawCircle(xCx, cy, 15 * dp, fill);
+                    c.drawCircle(xCx, cy, 12 * dp, fill);
                     stroke.setColor(alpha(cOnPill, a));
                     stroke.setStrokeWidth(1.8f * dp);
-                    float k = 4.5f * dp;
+                    float k = 3.5f * dp;
                     c.drawLine(xCx - k, cy - k, xCx + k, cy + k, stroke);
                     c.drawLine(xCx + k, cy - k, xCx - k, cy + k, stroke);
                     c.restore();

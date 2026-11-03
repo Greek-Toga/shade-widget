@@ -127,14 +127,14 @@
             android:scaleType="centerCrop"
             android:visibility="gone" />
 
-        <!-- Delete button: only on children of an expanded group, when the setting is on. -->
+        <!-- Delete button (when the setting is on): children of an expanded group, and a group's lone notification. -->
         <ImageView
             android:id="@+id/dismiss"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
             android:background="@drawable/dismiss_bg"
-            android:padding="7dp"
+            android:padding="6dp"
             android:src="@drawable/ic_close"
             android:tint="@color/on_pill"
             android:contentDescription="Delete notification"
