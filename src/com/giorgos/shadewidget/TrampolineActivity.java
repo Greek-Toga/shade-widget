@@ -53,6 +53,11 @@ public class TrampolineActivity extends Activity {
                         sbn != null ? sbn.getUser() : null);
                 break;
             }
+            case WidgetRenderer.OP_DISMISS: {
+                dismiss(in.getStringExtra(WidgetRenderer.EXTRA_KEY));
+                NotifListener.requestRender(this, true);
+                break;
+            }
             case WidgetRenderer.OP_OPEN: {
                 String key = in.getStringExtra(WidgetRenderer.EXTRA_KEY);
                 String pkg = in.getStringExtra(WidgetRenderer.EXTRA_PKG);
@@ -121,6 +126,41 @@ public class TrampolineActivity extends Activity {
             }
         }
         NotifListener.requestRender(this, false);
+    }
+
+    /**
+     * Delete one notification, in the shade too. If it was the last notification left in its
+     * group, also delete the group's summary so the whole group goes away, as it does in the shade.
+     */
+    private void dismiss(String key) {
+        NotifListener l = NotifListener.sInstance;
+        if (l == null || key == null) return;
+        StatusBarNotification target = find(key);
+        if (target == null) return;
+        if (!WidgetRenderer.isDismissEnabled(this) || !target.isClearable()) return;
+        try {
+            l.cancelNotification(key);
+            if (!target.isGroup()) return;
+            String gk = target.getGroupKey();
+            java.util.List<String> summaries = new java.util.ArrayList<>();
+            int remaining = 0;
+            StatusBarNotification[] all = l.getActiveNotifications();
+            if (all != null) {
+                for (StatusBarNotification s : all) {
+                    if (s == null || !gk.equals(s.getGroupKey()) || key.equals(s.getKey())) continue;
+                    if ((s.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+                        summaries.add(s.getKey());
+                    } else {
+                        remaining++;
+                    }
+                }
+            }
+            if (remaining == 0) {
+                for (String sk : summaries) l.cancelNotification(sk);
+            }
+        } catch (RuntimeException e) {
+            Log.w(TAG, "dismiss failed", e);
+        }
     }
 
     private void launchApp(String pkg, UserHandle user) {

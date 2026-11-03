@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,15 @@ public class MainActivity extends Activity {
         });
         ((Button) findViewById(R.id.btn_widget)).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { pinWidget(); }
+        });
+
+        Switch dismiss = findViewById(R.id.switch_dismiss);
+        dismiss.setChecked(WidgetRenderer.isDismissEnabled(this));
+        dismiss.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton b, boolean on) {
+                WidgetRenderer.setDismissEnabled(MainActivity.this, on);
+                NotifListener.requestRender(MainActivity.this, true);
+            }
         });
     }
 

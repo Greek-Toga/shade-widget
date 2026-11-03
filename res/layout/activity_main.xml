@@ -73,5 +73,34 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Add widget to home screen" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Delete from the widget"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:fontFamily="google-sans" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="When a group is expanded, each notification in it gets an X. Tap the X to delete that notification from the widget and from your notification shade. Deleting the last one removes the whole group." />
+
+        <com.giorgos.shadewidget.DemoView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <Switch
+            android:id="@+id/switch_dismiss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:minHeight="56dp"
+            android:text="Show delete buttons"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
     </LinearLayout>
 </ScrollView>

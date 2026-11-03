@@ -53,9 +53,11 @@ final class WidgetRenderer {
     static final String OP_OPEN = "open";
     static final String OP_APP = "app";
     static final String OP_TOGGLE = "toggle";
+    static final String OP_DISMISS = "dismiss";
 
     private static final String PREFS = "state";
     private static final String PREF_EXPANDED = "expanded";
+    private static final String PREF_DISMISS = "dismiss_enabled";
 
     /** Children shown as one-line previews under a collapsed group header (same as the shade). */
     private static final int COLLAPSED_PREVIEW_LINES = 2;
@@ -146,6 +148,15 @@ final class WidgetRenderer {
 
     // ---------------------------------------------------------------- expand state
 
+    /** The "delete from the widget" setting. Off until the user turns it on. */
+    static boolean isDismissEnabled(Context ctx) {
+        return ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(PREF_DISMISS, false);
+    }
+
+    static void setDismissEnabled(Context ctx, boolean on) {
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean(PREF_DISMISS, on).apply();
+    }
+
     static void toggleExpanded(Context ctx, String groupKey) {
         SharedPreferences p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         Set<String> s = new HashSet<>(p.getStringSet(PREF_EXPANDED, new HashSet<String>()));
@@ -169,6 +180,7 @@ final class WidgetRenderer {
     private static final class Ctx {
         Context c;
         boolean bitmaps;
+        boolean dismiss;
         long bitmapBytes;
         long now;
         int dp1;
@@ -197,6 +209,7 @@ final class WidgetRenderer {
         Ctx x = new Ctx();
         x.c = context;
         x.bitmaps = bitmaps;
+        x.dismiss = isDismissEnabled(context);
         x.now = System.currentTimeMillis();
         x.dp1 = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
                 context.getResources().getDisplayMetrics()));
@@ -264,6 +277,7 @@ final class WidgetRenderer {
             rv.setViewVisibility(R.id.large_icon, View.GONE);
             rv.setViewVisibility(R.id.progress, View.GONE);
             rv.setViewVisibility(R.id.chrono, View.GONE);
+            rv.setViewVisibility(R.id.dismiss, View.GONE);
             rv.setChronometer(R.id.chrono, 0, null, false);
             rv.setViewVisibility(R.id.header_text, View.VISIBLE);
             rv.setViewVisibility(R.id.title, View.VISIBLE);
@@ -346,6 +360,14 @@ final class WidgetRenderer {
                 fillNotification(x, rv, k, true);
                 rv.setViewPadding(R.id.card, x.dp(12), x.dp(8), x.dp(14), last ? x.dp(14) : x.dp(8));
                 rv.setOnClickFillInIntent(R.id.card, openIntent(k));
+                // X to delete: only here (expanded group), only when the setting is on, and only
+                // for notifications the shade itself lets you clear.
+                if (x.dismiss && k.sbn.isClearable()) {
+                    rv.setViewVisibility(R.id.dismiss, View.VISIBLE);
+                    rv.setOnClickFillInIntent(R.id.dismiss, new Intent()
+                            .putExtra(EXTRA_OP, OP_DISMISS)
+                            .putExtra(EXTRA_KEY, k.key));
+                }
                 add(x, k.key + "#c", rv);
             }
         } else {
