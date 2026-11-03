@@ -21,7 +21,7 @@ To update, install the newer APK over the old one. Your settings and widget stay
 - Pixel's Promotions, News, Social and Recommendations bundles are grouped the same way.
 - Tapping a notification opens it. If the shade would clear it on tap, the widget clears it too.
 - Material You colors from your wallpaper, a see-through background, and automatic light and dark mode.
-- Optional delete buttons: turn on "Show delete buttons" in the app, and expanded groups show an X on each notification. Deleting removes it from the shade too, and deleting the last one removes the group.
+- Optional delete buttons: turn on "Show delete buttons" in the app, and every notification that can be cleared shows an X: standalone ones right away, ones inside a group when the group is expanded. Deleting removes it from the shade too, and deleting the last one removes the group.
 
 ## What it doesn't do
 

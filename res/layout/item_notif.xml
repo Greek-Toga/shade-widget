@@ -127,7 +127,7 @@
             android:scaleType="centerCrop"
             android:visibility="gone" />
 
-        <!-- Delete button (when the setting is on): children of an expanded group, and a group's lone notification. -->
+        <!-- Delete button (when the setting is on): standalone notifications and children of an expanded group. -->
         <ImageView
             android:id="@+id/dismiss"
             android:layout_width="24dp"

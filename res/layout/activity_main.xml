@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="When a group is expanded, each notification in it gets an X. A group with only one notification shows its X right away. Tap the X to delete that notification from the widget and from your notification shade. Deleting the last one removes the whole group." />
+            android:text="When a group is expanded, each notification in it gets an X. Notifications that stand on their own show their X right away. Tap the X to delete that notification from the widget and from your notification shade. Deleting the last one removes the whole group." />
 
         <com.giorgos.shadewidget.DemoView
             android:layout_width="match_parent"

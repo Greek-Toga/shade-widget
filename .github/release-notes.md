@@ -10,6 +10,7 @@ A home screen widget that mirrors your Android notification shade.
 
 ## In this version
 
+- Every standalone notification that can be cleared now shows an X
 - A group with only one notification now shows its X too, and the X is a little smaller
 - New: delete notifications from the widget. Turn on "Show delete buttons" in the app, then expand a group and tap the X on any notification. It's removed from the shade too.
 - Fixed leftover pictures and missing icons after expanding or collapsing a group

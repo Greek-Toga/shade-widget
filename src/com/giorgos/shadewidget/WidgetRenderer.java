@@ -312,8 +312,8 @@ final class WidgetRenderer {
         RemoteViews rv = piece(x, R.layout.item_notif, gap, top, bottom);
         fillNotification(x, rv, e, false);
         rv.setOnClickFillInIntent(R.id.card, openIntent(e));
-        // A group with one notification shows no header or chevron, so it gets its X right away.
-        if (loneChild) showDismiss(x, rv, e);
+        // Standalone cards (including a group's lone notification) get their X right away.
+        showDismiss(x, rv, e);
         add(x, e.key, rv);
     }
 
